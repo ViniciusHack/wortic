@@ -35,6 +35,13 @@ export function ModalNewRoom() {
       })
     }
     console.log({data: {...data, words}});
+
+    toast({
+      title: "Created",
+      description: "You have created a new room",
+      status: "success",
+      isClosable: true
+    })
   }
 
   const addNewWord = (word: IWord, setError: (err: {field: string, message: string}) => void) => {
