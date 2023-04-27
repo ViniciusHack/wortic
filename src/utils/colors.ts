@@ -1,15 +1,15 @@
 
-import { Difficulty } from '../types';
+import { WordLevel } from '@prisma/client';
 
-export function getColorByDifficulty(difficulty: Difficulty) {
-  switch (difficulty) {
-    case "easy":
+export function getColorBywordLevel(wordLevel: WordLevel) {
+  switch (wordLevel) {
+    case "EASY":
       return "green";
-    case "medium":
+    case "MEDIUM":
       return "yellow";
-    case "hard":
+    case "HARD":
       return "orange";
-    case "expert":
+    case "EXTREME":
       return "red";
   }
 }

@@ -1,9 +1,10 @@
 import { Button, FormControl, FormErrorMessage, FormLabel, Input, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, Text, useToast, VStack } from "@chakra-ui/react";
 import { yupResolver } from '@hookform/resolvers/yup';
+import { RoomWord } from "@prisma/client";
 import { useState } from "react";
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import { IWord } from "../../../types";
+import { api } from "../../../services/api";
 import { WordSubmitting } from "../Form/WordSubmitting";
 
 interface IFormInputs {
@@ -11,20 +12,24 @@ interface IFormInputs {
   image_url: string;
 }
 
+interface ModalNewRoomProps {
+  onCreated: () => void;
+}
+
 const schema = yup.object({
   name: yup.string().required("The name field is required").max(50),
-  image_url: yup.string().url("The field value must be a url").required("The image url field is required"),
+  image_url: yup.string().url("The field value must be a url").optional()
 }).required();
 
-export function ModalNewRoom() {
-  const [words, setWords] = useState<IWord[]>([]);
+export function ModalNewRoom({ onCreated }: ModalNewRoomProps) {
+  const [words, setWords] = useState<Omit<RoomWord, "roomId">[]>([]);
   const toast = useToast();
 
-  const { register, handleSubmit, formState: { errors } } = useForm<IFormInputs>({
+  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<IFormInputs>({
     resolver: yupResolver(schema)
   });
 
-  const onSubmit = (data: IFormInputs) => {
+  const onSubmit = async (data: IFormInputs) => {
     if(words.length < 5) {
       return toast({
         title: "Failed",
@@ -34,7 +39,8 @@ export function ModalNewRoom() {
         isClosable: true
       })
     }
-    console.log({data: {...data, words}});
+
+    await api.post('/rooms', {...data, words})
 
     toast({
       title: "Created",
@@ -42,18 +48,19 @@ export function ModalNewRoom() {
       status: "success",
       isClosable: true
     })
+    onCreated()
   }
 
-  const addNewWord = (word: IWord, setError: (err: {field: string, message: string}) => void) => {
-    if(word.name.length > 16) return setError({ field: "name", message: "Too long"});
-    if(words.find(wordState => wordState.name === word.name)) return setError({ field: "name", message: "You cannot create duplicated words"})
+  const addNewWord = (word: Omit<RoomWord, "roomId">, setError: (err: {field: string, message: string}) => void) => {
+    if(word.content.length > 16) return setError({ field: "name", message: "Too long"});
+    if(words.find(wordState => wordState.content === word.content)) return setError({ field: "name", message: "You cannot create duplicated words"})
     setError({field: "", message: ""});
     setWords([...words, word]);
   }
 
   const removeWord = (name: string) => {
     setWords(
-      words.filter(word => word.name !== name)
+      words.filter(word => word.content !== name)
     )
   }
 
@@ -92,7 +99,14 @@ export function ModalNewRoom() {
         </ModalBody>
 
         <ModalFooter>
-          <Button colorScheme="blue" w="100%" type="submit">Create</Button>
+          <Button
+            disabled={isSubmitting}
+            colorScheme="blue"
+            w="100%"
+            type="submit"
+          >
+            Create
+          </Button>
         </ModalFooter>
       </form>
     </ModalContent>

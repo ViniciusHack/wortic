@@ -3,13 +3,7 @@ import type { NextPage } from 'next';
 import { useState } from 'react';
 import { RoomList } from '../components/RoomList';
 import { Header } from '../components/RoomList/Header';
-
-export type TagValue = "new" | "official" | "hot" | "all"
-
-export interface IFilter {
-  tag: TagValue;
-  value: string;
-}
+import { IFilter } from '../types';
 
 const Home: NextPage = () => {
   const [filter, setFilter] = useState<IFilter>({ tag: "all", value: "" });

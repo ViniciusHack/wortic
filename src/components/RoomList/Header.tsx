@@ -3,7 +3,7 @@ import { Badge, Box, Button, ButtonGroup, Flex, HStack, Input, InputGroup, Input
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
-import { IFilter, TagValue } from "../../pages";
+import { IFilter, TagValue } from "../../types";
 import { ModalLogin } from "./Modals/ModalLogin";
 import { ModalNewRoom } from "./Modals/ModalNewRoom";
 
@@ -85,7 +85,7 @@ export function Header({ handleFilter, currentFilter }: HeaderProps) {
       </Modal>
       <Modal isOpen={isModalNewRoomOpen} onClose={() => setIsModalNewRoomOpen(false)} size="4xl">
         <ModalOverlay />
-        <ModalNewRoom />
+        <ModalNewRoom onCreated={() => setIsModalNewRoomOpen(false)}/>
       </Modal>
     </Flex>
   )

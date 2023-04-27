@@ -1,21 +1,19 @@
 import { Box, Button, Flex, FormControl, FormErrorMessage, FormHelperText, FormLabel, HStack, Input, Radio, RadioGroup, Tag, TagLabel, TagLeftIcon, VStack } from "@chakra-ui/react";
+import { RoomWord, WordLevel } from "@prisma/client";
 import { X } from "phosphor-react";
 import { useState } from "react";
-import { Difficulty, IWord } from "../../../types";
-import { getColorByDifficulty } from "../../../utils/colors";
+import { getColorBywordLevel } from "../../../utils/colors";
 
 interface WordSubmittingInterface {
-  words: IWord[];
-  addNewWord: (word: IWord, setError: (err: {field: string, message: string}) => void) => void;
+  words: Omit<RoomWord, "roomId">[];
+  addNewWord: (word: Omit<RoomWord, "roomId">, setError: (err: {field: string, message: string}) => void) => void;
   removeWord: (name: string) => void;
 }
 
 export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmittingInterface) {
-  const [difficulty, setDifficulty] = useState<Difficulty>("easy");
+  const [wordLevel, setWordLevel] = useState<WordLevel>("EASY");
   const [wordName, setWordName] = useState("");
   const [error, setError] = useState({ field: "", message: "" });
-
-  console.log({error});
   
   return (
     <Flex w="100%" gap="8">
@@ -37,16 +35,16 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
             </FormControl>
             <RadioGroup>
               <HStack spacing="4">
-                <Radio value="easy" onChange={(e) => setDifficulty(e.target.value as Difficulty)}>Easy</Radio>
-                <Radio value="medium" onChange={(e) => setDifficulty(e.target.value as Difficulty)}>Medium</Radio>
-                <Radio value="hard" onChange={(e) => setDifficulty(e.target.value as Difficulty)}>Hard</Radio>
-                <Radio value="expert" onChange={(e) => setDifficulty(e.target.value as Difficulty)}>Expert</Radio>
+                <Radio value="EASY" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Easy</Radio>
+                <Radio value="MEDIUM" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Medium</Radio>
+                <Radio value="HARD" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Hard</Radio>
+                <Radio value="EXTREME" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Expert</Radio>
               </HStack>
             </RadioGroup>
           </VStack>
 
           <Button mt="2" colorScheme="purple" onClick={() => {
-            addNewWord({ name: wordName, difficulty }, setError), setWordName("")
+            addNewWord({ content: wordName, level: wordLevel }, setError), setWordName("")
           }}>
             Register word
           </Button>
@@ -58,9 +56,9 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
       <Box bgColor="gray.900" flex="1" rounded="2xl" p="4">
         <Flex gap="4" wrap="wrap">
           {words.map(word => (
-            <Tag key={word.name} colorScheme={getColorByDifficulty(word.difficulty)}>
-              <TagLeftIcon as={X} cursor="pointer" onClick={() => removeWord(word.name)}/>
-              <TagLabel wordBreak="break-all">{word.name}</TagLabel>
+            <Tag key={word.content} colorScheme={getColorBywordLevel(word.level)}>
+              <TagLeftIcon as={X} cursor="pointer" onClick={() => removeWord(word.content)}/>
+              <TagLabel wordBreak="break-all">{word.content}</TagLabel>
             </Tag>
           ))}
         </Flex>

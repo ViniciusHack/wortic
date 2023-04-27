@@ -1,5 +1,14 @@
 import { SimpleGrid } from '@chakra-ui/react';
+import { Player, Room } from '@prisma/client';
+import { useEffect, useState } from 'react';
+import { api } from '../../services/api';
 import { RoomItem } from './RoomItem';
+
+interface RoomListProps {
+  rooms:  (Room & {
+    owner: Player;
+  })[];
+}
 
 const mockRooms = [
   {
@@ -77,13 +86,26 @@ const mockRooms = [
 ]
 
 export function RoomList() {
+  const [rooms, setRooms] = useState<(Room & {
+    owner: Player;
+  })[]>([]);
   
+  useEffect(() => {
+    async function fetchRooms() {
+      const response = await api.get("/rooms")
+      setRooms(response.data)
+    }
+
+    fetchRooms()
+  }, [])
+  
+  console.log(rooms)
   return (
     <SimpleGrid 
       px="4"
       minChildWidth="300px"
       spacing="8"
-      maxH="602px"
+      maxH="402px"
       overflowY="auto"
       sx={{
         '&::-webkit-scrollbar': {
@@ -97,9 +119,28 @@ export function RoomList() {
         },
       }}
     >
-      {mockRooms.map(room => (
+      {rooms.map(room => (
         <RoomItem key={room.id} {...room} />
       ))}
     </SimpleGrid>
   )
 }
+
+
+// export const getServerSideProps: GetServerSideProps = async () => {
+//   const rooms = await prisma.room.findMany({
+//     include: {
+//       owner: true
+//     }
+//   }) || []
+
+//   console.log("Aqui", rooms)
+
+
+//   return {
+//     props: {
+//       rooms: []
+//     },
+//     // revalidate: 1
+//   }
+// }
