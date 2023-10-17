@@ -6,11 +6,20 @@ export const theme = extendTheme({
     heading: 'Quicksand',
     body: 'Quicksand'  
   },
+  colors: {
+    blue: {
+      1000: "#1E293B"
+    },
+    gray: {
+      450: "#475569",
+      650: "#334155",
+    }
+  },
   styles: {
     global: {
       body: {
-        bg: 'gray.900',
-        color: 'gray.50'
+        color: 'gray.50',
+        bgImage: "/background.png"
       }
     }
   }

@@ -9,9 +9,8 @@ import { RoomInfo } from "./RoomInfo";
 export function RoomItem({ id, name, image_url, owner }: (Room & {
   owner: Player;
 })) {
-  console.log({image_url})
   return (
-    <Link href={`/room/${id}`}>
+    <Link href={`/rooms/${id}`}>
       <ChakraLink
         bgColor="gray.600"
         p="4"

@@ -29,7 +29,15 @@ export function ModalLogin() {
             </Center>
           </Button>
 
-          <Button p="4" w="100%"  bgColor="#ff3e30" _hover={{ bgColor: "#ff3e30cb"}} _active={{ bgColor: "#ff3e30a1"}} leftIcon={<FaGoogle size={20} />}>
+          <Button
+            p="4"
+            w="100%"
+            bgColor="#ff3e30"
+            _hover={{ bgColor: "#ff3e30cb"}}
+            _active={{ bgColor: "#ff3e30a1"}}
+            leftIcon={<FaGoogle size={20} />}
+            onClick={() => signIn('google')}
+          >
             <Center>
               <Text>Google</Text>
             </Center>

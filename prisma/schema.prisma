@@ -25,15 +25,19 @@ model Player {
 }
 
 model Room {
-  id         String   @id @default(uuid())
-  ownerId    String
-  owner      Player   @relation(fields: [ownerId], references: [id])
-  name       String
-  image_url  String?
-  created_at DateTime @default(now())
-  updated_at DateTime @updatedAt
+  id          String   @id @default(uuid())
+  ownerId     String
+  owner       Player   @relation(fields: [ownerId], references: [id])
+  name        String
+  gameTime    Int      @default(100) @map("game_time")
+  winnerScore Int      @default(150) @map("winner_score")
+  image_url   String?
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
 
   words RoomWord[]
+
+  // @@map("rooms")
 }
 
 enum WordLevel {

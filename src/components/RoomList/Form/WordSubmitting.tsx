@@ -19,7 +19,7 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
     <Flex w="100%" gap="8">
       <Box>
         <FormControl flex="1" >
-          <FormLabel htmlFor="word_name">Words</FormLabel>
+          <FormLabel htmlFor="word_name">Palavras*</FormLabel>
           <VStack spacing="4">
             <FormControl isInvalid={!!error.message}>
               <Input 
@@ -35,25 +35,25 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
             </FormControl>
             <RadioGroup>
               <HStack spacing="4">
-                <Radio value="EASY" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Easy</Radio>
-                <Radio value="MEDIUM" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Medium</Radio>
-                <Radio value="HARD" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Hard</Radio>
-                <Radio value="EXTREME" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Expert</Radio>
+                <Radio value="EASY" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Fácil</Radio>
+                <Radio value="MEDIUM" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Médio</Radio>
+                <Radio value="HARD" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Difícil</Radio>
+                <Radio value="EXTREME" onChange={(e) => setWordLevel(e.target.value as WordLevel)}>Muito difiícil</Radio>
               </HStack>
             </RadioGroup>
           </VStack>
 
-          <Button mt="2" colorScheme="purple" onClick={() => {
+          <Button mt="2" size="sm" colorScheme="purple" onClick={() => {
             addNewWord({ content: wordName, level: wordLevel }, setError), setWordName("")
           }}>
-            Register word
+            Registrar palavra
           </Button>
           
-          <FormHelperText>Here is where you can register your words</FormHelperText>
+          <FormHelperText>Aqui é onde você deve registrar suas palavras</FormHelperText>
         </FormControl>
       </Box>
 
-      <Box bgColor="gray.900" flex="1" rounded="2xl" p="4">
+      <Box bgColor="gray.900" maxH="60" flex="1" rounded="2xl" p="4">
         <Flex gap="4" wrap="wrap">
           {words.map(word => (
             <Tag key={word.content} colorScheme={getColorBywordLevel(word.level)}>

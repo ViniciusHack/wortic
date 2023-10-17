@@ -1,5 +1,6 @@
 /* eslint-disable react/no-children-prop */
-import { Badge, Box, Button, ButtonGroup, Flex, HStack, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, Spacer } from "@chakra-ui/react";
+import { Avatar, Badge, Box, Button, ButtonGroup, Flex, HStack, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, Spacer, Text } from "@chakra-ui/react";
+import { useSession } from "next-auth/react";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
@@ -39,6 +40,8 @@ export function Header({ handleFilter, currentFilter }: HeaderProps) {
   const [isModalLoginOpen, setIsModalLoginOpen] = useState(false);
   const [isModalNewRoomOpen, setIsModalNewRoomOpen] = useState(false);
 
+  const { data } = useSession()
+
   return (
     <Flex as="header" align="flex-start">
       <Box>
@@ -76,7 +79,16 @@ export function Header({ handleFilter, currentFilter }: HeaderProps) {
       <Spacer />
 
       <ButtonGroup size="md" spacing="4" colorScheme="blue">
-        <Button onClick={() => setIsModalLoginOpen(true)}>Log in</Button>
+        {!data?.user ?
+          <Button onClick={() => setIsModalLoginOpen(true)} colorScheme="purple">
+            Log in
+          </Button>
+          : 
+          <Flex gap={2} alignItems="center">
+            <Avatar size="sm" src={data.user.image!}/>
+            <Text fontSize="md">{data.user.name}</Text>
+          </Flex>
+        }
         {/* <Button onClick={() => setIsModalOpen(true)} variant="outline">Sign Up</Button> */}
       </ButtonGroup>
       <Modal isOpen={isModalLoginOpen} onClose={() => setIsModalLoginOpen(false)} isCentered> {/*isCentered, motionPreset backdropFilters*/}
