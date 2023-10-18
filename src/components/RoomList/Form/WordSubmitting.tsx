@@ -53,7 +53,7 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
         </FormControl>
       </Box>
 
-      <Box bgColor="gray.900" maxH="60" flex="1" rounded="2xl" p="4">
+      <Box bgColor="gray.900" maxH="60" overflow="auto" flex="1" rounded="2xl" p="4">
         <Flex gap="4" wrap="wrap">
           {words.map(word => (
             <Tag key={word.content} colorScheme={getColorBywordLevel(word.level)}>
