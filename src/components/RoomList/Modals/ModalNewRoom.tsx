@@ -50,11 +50,20 @@ export function ModalNewRoom({ onCreated }: ModalNewRoomProps) {
     onCreated()
   }
 
-  const addNewWord = (word: Omit<RoomWord, "roomId">, setError: (err: {field: string, message: string}) => void) => {
-    if(word.content.length > 16) return setError({ field: "name", message: "Too long"});
-    if(words.find(wordState => wordState.content === word.content)) return setError({ field: "name", message: "You cannot create duplicated words"})
-    setError({field: "", message: ""});
-    setWords([...words, word]);
+  const addNewWord = (wordReceived: Omit<RoomWord, "roomId">, setError: (err: {field: string, message: string}) => void) => {
+    const wordsBulk = wordReceived.content.split(',')
+    const wordsToSave:Omit<RoomWord, "roomId">[] = []
+    wordsBulk.forEach(word => {
+      if(word.trim().length > 16) return setError({ field: "name", message: "Too long"});
+      if(!words.some(wordState => wordState.content.trim().toLowerCase() === word.trim().toLowerCase())) {
+        setError({field: "", message: ""});
+        wordsToSave.push({
+          content: word.trim(),
+          level: wordReceived.level
+        })
+      }
+    })
+    setWords(state => state.concat(wordsToSave));
   }
 
   const removeWord = (name: string) => {

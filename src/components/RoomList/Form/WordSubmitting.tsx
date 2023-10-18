@@ -25,7 +25,7 @@ export function WordSubmitting({ addNewWord, removeWord, words }: WordSubmitting
               <Input 
                 type="text" 
                 id="word_name" 
-                maxLength={16}
+                // maxLength={16}
                 minLength={2}
                 placeholder="Steve" 
                 value={wordName} 
