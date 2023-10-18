@@ -1,9 +1,9 @@
+import prisma from "../../shared/services/prisma";
 import { CreateWithWordsParams, RoomsRepository } from "../RoomsRepository";
-
 
 export class PrismaRoomsRepository implements RoomsRepository {
   async createWithWords({ room, words }: CreateWithWordsParams) {
-    const createdRoom = await prisma!.room.create({
+    const createdRoom = await prisma.room.create({
       data: {
         ...room,
         words: {
@@ -17,7 +17,7 @@ export class PrismaRoomsRepository implements RoomsRepository {
   }
 
   async findById(id: string) {
-    const room = await prisma!.room.findUnique({
+    const room = await prisma.room.findUnique({
       where: {
         id
       }
