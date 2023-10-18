@@ -210,7 +210,7 @@ export default function Room() {
             <Box 
               h="full" 
               bg="purple.500" 
-              w={`${((roomRealTime.timeLeft / 1000) / room!.gameTime) * 100}%`} 
+              w={`${((roomRealTime.timeLeft / 1000) / (room?.gameTime ?? 60)) * 100}%`} 
               transition="width 1s linear"
             />
           </Box>
