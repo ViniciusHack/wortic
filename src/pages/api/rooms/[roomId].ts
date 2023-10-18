@@ -11,6 +11,7 @@ const handler = async (req: EnsureAuthenticatedRequest, res: NextApiResponse) =>
           code: "invalid.roomId"
         })
       }
+      
       const room = await prisma.room.findUnique({
         where: {
           id: req.query.roomId as string

@@ -29,7 +29,7 @@ const handler = async (req: RoomRequest, res: NextApiResponse) => {
       const roomsRepository = new PrismaRoomsRepository()
       const playersRepository = new PrismaPlayersRepository()
       const createRoomUseCase = new CreateRoomUseCase(roomsRepository, playersRepository)
-      const room = createRoomUseCase.execute({ name, image_url, winnerScore, gameTime, playerEmail: player.email, words })
+      const room = await createRoomUseCase.execute({ name, image_url, winnerScore, gameTime, playerEmail: player.email, words })
 
       return res.status(201).json(room)
     case "GET":
