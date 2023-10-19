@@ -43,7 +43,7 @@ export function ModalNewRoom({ onCreated }: ModalNewRoomProps) {
 
     toast({
       title: "Created",
-      description: "You have created a new room",
+      description: "You have created a Nova sala",
       status: "success",
       isClosable: true
     })

@@ -1,5 +1,6 @@
 import { Avatar, Box, Center, Flex, Grid, IconButton, Modal, ModalOverlay, Text } from "@chakra-ui/react"
 import { Room as RoomType } from "@prisma/client"
+import { useSession } from "next-auth/react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { CheckCircle, CrownSimple, Pencil, Question, Warning, XCircle } from "phosphor-react"
@@ -87,10 +88,12 @@ export default function Room() {
   const [isModalInfoOpen, setIsModalInfoOpen] = useState(false)
   const [isModalReportWordOpen, setIsModalReportWordOpen] = useState(false)
   const router = useRouter()
+  const { data } = useSession()
 
   useEffect(() => {
     async function fetchRoom() {
       const socket = await getSocket()
+      console.log({data})
       if(router.query.roomId && socket) {
         const response = await api.get(`/rooms/${router.query.roomId}`)
         setRoom(response.data)
@@ -120,7 +123,7 @@ export default function Room() {
   return (
     <Center h="100vh" maxWidth="60%" m="0 auto">
       <Head>
-        <title>Room | Wortic</title>
+        <title>{room ? room.name : 'Sala'} | Wortic</title>
       </Head>
       <Grid templateColumns='1fr 2fr' gap={8} w="100%">
         <Box bg="blue.1000" p="4" pt="6" rounded="4" minH="500px">

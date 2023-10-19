@@ -1,6 +1,6 @@
 /* eslint-disable react/no-children-prop */
 import { Avatar, Badge, Box, Button, ButtonGroup, Flex, HStack, Input, InputGroup, InputLeftElement, Modal, ModalOverlay, Spacer, Text } from "@chakra-ui/react";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { MagnifyingGlass } from "phosphor-react";
 import { useState } from "react";
 import { FaPlusCircle } from "react-icons/fa";
@@ -55,7 +55,7 @@ export function Header({ handleFilter, currentFilter }: HeaderProps) {
           />
         </InputGroup>
         <Button mt="2" colorScheme="purple" leftIcon={<FaPlusCircle />} onClick={() => setIsModalNewRoomOpen(true)}>
-          New room
+          Nova sala
         </Button>
       </Box>
 
@@ -87,6 +87,15 @@ export function Header({ handleFilter, currentFilter }: HeaderProps) {
           <Flex gap={2} alignItems="center">
             <Avatar size="sm" src={data.user.image!}/>
             <Text fontSize="md">{data.user.name}</Text>
+            <Button
+              colorScheme="red"
+              size="sm"
+              px="2"
+              ml="2"
+              onClick={() => signOut()}
+            >
+              Sair
+            </Button>
           </Flex>
         }
         {/* <Button onClick={() => setIsModalOpen(true)} variant="outline">Sign Up</Button> */}
