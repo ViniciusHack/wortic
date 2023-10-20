@@ -1,6 +1,5 @@
 import { Avatar, Box, Center, Flex, Grid, IconButton, Modal, ModalOverlay, Text } from "@chakra-ui/react"
 import { Room as RoomType } from "@prisma/client"
-import { useSession } from "next-auth/react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { CheckCircle, CrownSimple, Pencil, Question, Warning, XCircle } from "phosphor-react"
@@ -88,18 +87,18 @@ export default function Room() {
   const [isModalInfoOpen, setIsModalInfoOpen] = useState(false)
   const [isModalReportWordOpen, setIsModalReportWordOpen] = useState(false)
   const router = useRouter()
-  const { data } = useSession()
 
   useEffect(() => {
     async function fetchRoom() {
       const socket = await getSocket()
-      console.log({data})
       if(router.query.roomId && socket) {
         const response = await api.get(`/rooms/${router.query.roomId}`)
         setRoom(response.data)
+        
         socket.on("room_updated", (players: RoomPlayer[]) => {
           setPlayers(players)
         })
+        
         socket.on("word_letters", (word_letters: number) => {
           setRoom(state => {
             return {
@@ -108,12 +107,15 @@ export default function Room() {
             }
           })
         })
+        
         socket.on("round_end", ({reason, answer}) => {
           setRoomRealTime(state => ({...state, reason, answer, status: "STARTING"}))
         })
+        
         socket.on("time_left", (timeLeft: number) => {
           setRoomRealTime(state => ({ ...state, timeLeft, status: "RUNNING", reason: '' }))
         })
+        
         socket.emit("join_room", router.query.roomId)
       }
     }
@@ -150,8 +152,8 @@ export default function Room() {
                   }
                 </Box>
                 <Box>
-                  <Text textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" maxW="200px" fontWeight={600} fontSize={18}>{user.name}</Text>
-                  <Text fontWeight={500} lineHeight={0.5} fontSize={14}>{user.score} pts.</Text>
+                  <Text color={user.status === "done" ? 'green.300' : ''} textOverflow="ellipsis" overflow="hidden" whiteSpace="nowrap" maxW="200px" fontWeight={600} fontSize={18}>{user.name}</Text>
+                  <Text color={user.status === "done" ? 'green.300' : ''} fontWeight={500} lineHeight={0.5} fontSize={14}>{user.score} pts.</Text>
                 </Box>
               </Flex>
             )

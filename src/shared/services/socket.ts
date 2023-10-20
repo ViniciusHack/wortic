@@ -7,7 +7,7 @@ let socket: Socket
 export const getSocket = async (): Promise<Socket> => {
   if (!socket) {
     const response = await api.get(`/token`)
-    socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL ?? 'http://localhost:3333', {
+    socket = io(process.env.NEXT_PUBLIC_WEBSOCKET_URL!, {
       query: {
         token: response.data.token
       }
